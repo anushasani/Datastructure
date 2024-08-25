@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessible Hamburger Menu</title>
+    <style>
+      /* Basic styling */
+      .hamburger {
+        display: inline-block;
+        cursor: pointer;
+        font-size: 24px;
+        background: none;
+        border: none;
+      }
+      .menu {
+        display: none;
+        list-style: none;
+        padding: 0;
+      }
+      .menu.open {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Hamburger button -->
+    <button
+      class="hamburger"
+      aria-expanded="false"
+      aria-controls="menu"
+      aria-label="Open navigation menu"
+    >
+      =
+    </button>
+
+    <!-- Navigation menu -->
+    <ul id="menu" class="menu" role="menu">
+      <li role="none"><a href="#" role="menuitem">Home</a></li>
+      <li role="none"><a href="#" role="menuitem">About</a></li>
+      <li role="none"><a href="#" role="menuitem">Services</a></li>
+      <li role="none"><a href="#" role="menuitem">Contact</a></li>
+    </ul>
+
+    <script>
+      const hamburger = document.querySelector(".hamburger");
+      const menu = document.getElementById("menu");
+
+      hamburger.addEventListener("click", () => {
+        const expanded =
+          hamburger.getAttribute("aria-expanded") === "true" || false;
+        hamburger.setAttribute("aria-expanded", !expanded);
+        menu.classList.toggle("open");
+
+        // Set focus to the first item in the menu when opened
+        if (!expanded) {
+          menu.querySelector('[role="menuitem"]').focus();
+        }
+      });
+
+      // Close the menu when clicking outside
+      document.addEventListener("click", (event) => {
+        if (!hamburger.contains(event.target) && !menu.contains(event.target)) {
+          menu.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Close the menu with Esc key
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && menu.classList.contains("open")) {
+          menu.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          hamburger.focus();
+        }
+      });
+    </script>
+  </body>
+</html>
